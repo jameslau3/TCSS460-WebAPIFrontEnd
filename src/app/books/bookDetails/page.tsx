@@ -57,7 +57,6 @@ export default function Book(isbn13: String) {
 
 
       
-       //console.log("ISBN MFER: " + book.isbn13);
         return (
             <div> 
                 
