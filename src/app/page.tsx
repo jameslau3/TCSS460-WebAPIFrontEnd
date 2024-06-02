@@ -25,8 +25,8 @@ export default function Home() {
         <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
           Template for TCSS 460 SP24
         </Typography>
-        <Link href="/about" color="secondary" component={NextLink}>
-          Go to the about page
+        <Link href="/books/multiple" color="secondary" component={NextLink}>
+          Go to the home page
         </Link>
         <ProTip />
         <Informational />

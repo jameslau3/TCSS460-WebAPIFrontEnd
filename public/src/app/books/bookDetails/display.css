@@ -1,0 +1,5 @@
+h1 {
+    font-family: 'Arial', sans-serif; /* You can specify multiple fonts as fallbacks */
+    font-size: 36px; /* Adjust the font size as needed */
+    color: #333; /* Optional: change the color */
+}
