@@ -62,7 +62,8 @@ function BookListItem({
 }
 
 export default function About() {
-  const [bookTitle, setBookTitle] = React.useState('');
+  const [bookQuery, setBookQuery] = React.useState('');
+  const [searchType, setSearchType] = React.useState('title');
   const [currentPage, setCurrentPage] = React.useState(1);
   const [pageLimit, setPageLimit] = React.useState(10);
   const [books, setBooks] = React.useState<IBook[]>([]);
@@ -75,7 +76,7 @@ export default function About() {
     setError(null);
     try {
       let url = title 
-        ? `http://localhost:4000/books/title/?title=${title}&page=${page}&limit=${limit}`
+        ? `http://localhost:4000/books/${searchType}/?${searchType}=${title}&page=${page}&limit=${limit}`
         : `http://localhost:4000/books/all?page=${page}&limit=${limit}`;
       const res = await fetch(url);
       if (!res.ok) {
@@ -96,21 +97,25 @@ export default function About() {
 
   const handleSearch = () => {
     setCurrentPage(1);
-    fetchBooks(bookTitle, 1, pageLimit);
+    fetchBooks(bookQuery, 1, pageLimit);
   };
 
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setBookTitle(event.target.value);
+  const handleSearchTypeChange = (event: SelectChangeEvent) => {
+    setSearchType(String(event.target.value));
+  };
+
+  const handleQueryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setBookQuery(event.target.value);
   };
 
   const handleLimitChange = (event: SelectChangeEvent) => {
     setPageLimit(Number(event.target.value));
     setCurrentPage(1);
-    fetchBooks(bookTitle, 1, Number(event.target.value));
+    fetchBooks(bookQuery, 1, Number(event.target.value));
   };
 
   React.useEffect(() => {
-    fetchBooks(bookTitle, currentPage, pageLimit);
+    fetchBooks(bookQuery, currentPage, pageLimit);
   }, [currentPage, pageLimit]);
 
   const handleDelete = (isbns: string) => {
@@ -121,7 +126,7 @@ export default function About() {
     // );
   };
 
-  const displayedBooks = bookTitle ? bookText : books;
+  const displayedBooks = bookQuery ? bookText : books;
   const totalPages = Math.ceil(displayedBooks.length / pageLimit);
 
   const handlePreviousPage = () => {
@@ -151,7 +156,27 @@ export default function About() {
         THE 460 LIBRARY
       </Typography>
       <Box sx={{ my: 4, display: "flex", flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
-        <TextField id="outlined-basic" label="Book Title" variant="outlined" onChange={handleTitleChange} />
+      <FormControl sx={{ m: 1, minWidth: 80 }}>
+          <InputLabel id="demo-simple-select-autowidth-label">Search</InputLabel>
+          <Select
+            labelId="demo-simple-select-autowidth-label"
+            id="demo-simple-select-autowidth"
+            onChange={handleSearchTypeChange}
+            autoWidth
+            label="Search Type"
+            value={searchType}
+          >
+            <MenuItem value={'title'}>Title</MenuItem>
+            <MenuItem value={'author'}>Author</MenuItem>
+            <MenuItem value={'rating'}>Min. Rating</MenuItem>
+            <MenuItem value={'publication_year'}>Release Year</MenuItem>
+          </Select>
+        </FormControl>
+        <TextField id="outlined-basic" label="Book Search Query" variant="outlined" onChange={handleQueryChange} onKeyDown={(ent) => {
+          if (ent.key === 'Enter') {
+            handleSearch();
+          }
+        }}/>
         <Button
           style={{
             marginLeft: 3,
