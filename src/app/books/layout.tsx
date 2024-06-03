@@ -12,7 +12,7 @@ function BooksLayout({
   return (
     <section>
       {/* Include shared UI here e.g. a header or sidebar */}
-      <AppBar position="static">
+      <AppBar position="sticky">
         <Toolbar>
           <Typography
             variant="h6"
@@ -25,7 +25,7 @@ function BooksLayout({
             <IconButton href="/books/multiple" color="inherit" style = {{marginBottom: 2.5}}>
               <LocalLibraryIcon />
             </IconButton>
-            Group 8 Books Library (Name In Progress)
+            JAVAN LIBRARY
           </Typography>
           <Box sx={{ display: { xs: "none", sm: "block" } }}>
             <IconButton href="/books/multiple" color="inherit">
