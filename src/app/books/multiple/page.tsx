@@ -119,11 +119,15 @@ export default function About() {
   }, [currentPage, pageLimit]);
 
   const handleDelete = (isbns: string) => {
-    // fetch("http://localhost:4000/books/isbn" + isbns, {
-    //   method: "DELETE",
-    // }).then(
-    //   (res) => res.ok && setBooks(books.filter((bookItem) => bookItem.isbn13 != isbns))
-    // );
+    fetch("http://localhost:4000/books/isbn", {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ isbns: [isbns] })
+    }).then(
+      (res) => res.ok && setBooks(books.filter((bookItem) => bookItem.isbn13 != isbns))
+    );
   };
 
   const displayedBooks = bookQuery ? bookText : books;
@@ -198,8 +202,8 @@ export default function About() {
         <Box sx={{ mt: 1 }}>
           <List>
             {displayedBooks.slice((currentPage - 1) * pageLimit, currentPage * pageLimit).map((book, index) => (
-              <React.Fragment key={index}>
-                <BookListItem book={book} onDelete={() => handleDelete(book.isbn13)} />
+              <React.Fragment key={book.isbn13}>
+                <BookListItem book={book} onDelete={() => {handleDelete(book.isbn13); let tempQ = bookQuery; setBookQuery(''); handleSearch(); setBookQuery(tempQ); handleSearch();}} />
                 {index < displayedBooks.length - 1 && <Divider variant="middle" component="li" />}
               </React.Fragment>
             ))}
